@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Photos</string>
+    <string name="album_name">Album Name</string>
+    <string name="add_album">Add Album</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <string-array name="album_names">
+
+    </string-array>
 </resources>
