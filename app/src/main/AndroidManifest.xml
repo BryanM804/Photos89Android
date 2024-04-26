@@ -27,6 +27,12 @@
             android:exported="false"
             >
         </activity>
+        <activity
+            android:name=".activities.ViewAlbum"
+            android:parentActivityName=".Photos"
+            android:exported="false"
+            >
+        </activity>
     </application>
 
 </manifest>

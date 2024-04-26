@@ -20,6 +20,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import group89.photos.activities.AddAlbum;
+import group89.photos.activities.ViewAlbum;
 
 public class Photos extends AppCompatActivity{
 
@@ -44,7 +45,7 @@ public class Photos extends AppCompatActivity{
         // Populate ListView
         this.albumList = findViewById(R.id.albumList);
         this.albumList.setAdapter(new ArrayAdapter<>(this, R.layout.album, this.albumManager.getAlbums()));
-        // TODO: add on click that will open the album in a child activity
+        this.albumList.setOnItemClickListener((list, view, pos, id) -> openAlbum(pos));
 
         // This is default code not sure what it even does
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -89,6 +90,17 @@ public class Photos extends AppCompatActivity{
     private void addAlbum() {
         Intent addAlbum = new Intent(this, AddAlbum.class);
         this.startForResultAdd.launch(addAlbum);
+    }
+
+    private void openAlbum(int index) {
+        Album selectedAlbum = this.albumManager.getAlbums().get(index);
+        Bundle bundle = new Bundle();
+
+        bundle.putString("albumName", selectedAlbum.getName());
+
+        Intent openAlbumIntent = new Intent(this, ViewAlbum.class);
+        openAlbumIntent.putExtras(bundle);
+        this.startForResultEdit.launch(openAlbumIntent);
     }
 
     private void applyChanges(ActivityResult res) {

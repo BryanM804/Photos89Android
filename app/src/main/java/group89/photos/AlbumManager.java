@@ -80,6 +80,7 @@ public class AlbumManager implements Serializable {
 
         } catch (Exception e) {
             Log.d("Error", "Could not load albums!\n" + e);
+            Log.d("INFO", "Path: " + managerPath);
         }
     }
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Photo implements Serializable {
+    private static final long serialVersionUID = 1L;
     private List<String> personTags;
     private List<String> locationTags;
     // I would think this has the same restriction of only one location per photo

@@ -4,8 +4,8 @@
     <string name="add_album">Add Album</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-
-    <string-array name="album_names">
-
-    </string-array>
+    <string name="album">Album</string>
+    <string name="rename_album">Rename Album</string>
+    <string name="delete_album">Delete Album</string>
+    <string name="add_photo">Add Photo</string>
 </resources>

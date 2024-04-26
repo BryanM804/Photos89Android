@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.ViewAlbum"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item android:title="@string/rename_album"
+        android:onClick="renameAlbum" />
+    <item android:title="@string/delete_album"
+        android:onClick="deleteAlbum" />
+    <item android:title="@string/add_photo"
+        android:onClick="addPhoto" />
+</menu>
