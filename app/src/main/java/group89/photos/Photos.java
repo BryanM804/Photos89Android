@@ -19,14 +19,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import group89.photos.activities.AddAlbum;
 
-public class Photos extends AppCompatActivity {
+public class Photos extends AppCompatActivity{
 
-    private List<Album> albums;
+    private AlbumManager albumManager;
     private ListView albumList;
     private ActivityResultLauncher<Intent> startForResultAdd;
     private ActivityResultLauncher<Intent> startForResultEdit; // This may not have to be here
@@ -40,16 +37,13 @@ public class Photos extends AppCompatActivity {
         Toolbar mainToolbar = findViewById(R.id.mainToolbar);
         setSupportActionBar(mainToolbar);
 
-        // Load albums
-        String[] albumStrings = { "Test Album" };
-        this.albums = new ArrayList<>();
-        for (String a : albumStrings) {
-            albums.add(new Album(a));
-        }
+        // App specific storage path            VVVV
+        this.albumManager = new AlbumManager(this.getFilesDir().toString());
+        albumManager.loadAlbums();
 
         // Populate ListView
         this.albumList = findViewById(R.id.albumList);
-        this.albumList.setAdapter(new ArrayAdapter<>(this, R.layout.album, albums));
+        this.albumList.setAdapter(new ArrayAdapter<>(this, R.layout.album, this.albumManager.getAlbums()));
         // TODO: add on click that will open the album in a child activity
 
         // This is default code not sure what it even does
@@ -103,9 +97,10 @@ public class Photos extends AppCompatActivity {
         if (albumInfo == null) return;
 
         String newAlbumName = albumInfo.getString("albumName");
-        this.albums.add(new Album(newAlbumName));
+        this.albumManager.addAlbum(new Album(newAlbumName));
+        this.albumManager.saveAlbums();
 
         // Adding the adapter again updates the list
-        this.albumList.setAdapter(new ArrayAdapter<>(this, R.layout.album, albums));
+        this.albumList.setAdapter(new ArrayAdapter<>(this, R.layout.album, this.albumManager.getAlbums()));
     }
 }
