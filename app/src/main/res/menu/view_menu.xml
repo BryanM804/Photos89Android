@@ -5,10 +5,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <item android:title="@string/rename_album"
-        android:onClick="renameAlbum" />
-    <item android:title="@string/delete_album"
-        android:onClick="deleteAlbum" />
-    <item android:title="@string/add_photo"
-        android:onClick="addPhoto" />
+    <item
+        android:id="@+id/album_rename"
+        android:title="@string/rename_album"
+        android:onClick="renameAlbum"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/album_delete"
+        android:title="@string/delete_album"
+        android:onClick="deleteAlbum"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/add_photo"
+        android:title="@string/add_photo"
+        android:onClick="addPhoto"
+        app:showAsAction="collapseActionView" />
 </menu>

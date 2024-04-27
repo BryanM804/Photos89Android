@@ -15,14 +15,20 @@ public class AlbumManager implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static final String managerFile = "albumManager.dat";
+    private static AlbumManager instance;
     private final String appDir;
     private List<Album> albums;
 
     public AlbumManager(String appDir) {
         this.albums = new ArrayList<>();
         this.appDir = appDir;
+        instance = this;
 
         loadAlbums();
+    }
+
+    public static AlbumManager getInstance() {
+        return instance;
     }
 
     public void addAlbum(Album newAlbum) {
@@ -30,15 +36,24 @@ public class AlbumManager implements Serializable {
     }
 
     public boolean deleteAlbum(String albumName) {
-        for (Album a : this.albums) {
+        for (Album a : albums) {
             if (a.getName().equals(albumName)) {
-                return this.albums.remove(a);
+                return albums.remove(a);
             }
         }
 
         return false;
     }
-    
+
+    public Album getAlbumByName(String albumName) {
+        for (Album a : albums) {
+            if (a.getName().equals(albumName)) {
+                return a;
+            }
+        }
+
+        return null;
+    }
     public List<Album> getAlbums() {
         return this.albums;
     }

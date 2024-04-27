@@ -19,10 +19,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.Serializable;
+
 import group89.photos.activities.AddAlbum;
 import group89.photos.activities.ViewAlbum;
 
-public class Photos extends AppCompatActivity{
+public class Photos extends AppCompatActivity {
 
     private AlbumManager albumManager;
     private ListView albumList;
@@ -39,13 +41,13 @@ public class Photos extends AppCompatActivity{
         setSupportActionBar(mainToolbar);
 
         // App specific storage path            VVVV
-        this.albumManager = new AlbumManager(this.getFilesDir().toString());
+        albumManager = new AlbumManager(this.getFilesDir().toString());
         albumManager.loadAlbums();
 
         // Populate ListView
-        this.albumList = findViewById(R.id.albumList);
-        this.albumList.setAdapter(new ArrayAdapter<>(this, R.layout.album, this.albumManager.getAlbums()));
-        this.albumList.setOnItemClickListener((list, view, pos, id) -> openAlbum(pos));
+        albumList = findViewById(R.id.albumList);
+        albumList.setAdapter(new ArrayAdapter<>(this, R.layout.album, albumManager.getAlbums()));
+        albumList.setOnItemClickListener((list, view, pos, id) -> openAlbum(pos));
 
         // This is default code not sure what it even does
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -54,18 +56,18 @@ public class Photos extends AppCompatActivity{
             return insets;
         });
 
-        this.startForResultAdd = registerForActivityResult(
+        startForResultAdd = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        this.applyChanges(result);
+                        applyChanges(result);
                     }
                 });
-        this.startForResultEdit = registerForActivityResult(
+        startForResultEdit = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        this.applyChanges(result);
+                        applyChanges(result);
                     }
                 });
     }
@@ -80,27 +82,32 @@ public class Photos extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.album_add) {
-            this.addAlbum();
+            addAlbum();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateList();
+    }
 
     private void addAlbum() {
         Intent addAlbum = new Intent(this, AddAlbum.class);
-        this.startForResultAdd.launch(addAlbum);
+        startForResultAdd.launch(addAlbum);
     }
 
     private void openAlbum(int index) {
-        Album selectedAlbum = this.albumManager.getAlbums().get(index);
+        Album selectedAlbum = albumManager.getAlbums().get(index);
         Bundle bundle = new Bundle();
 
         bundle.putString("albumName", selectedAlbum.getName());
 
         Intent openAlbumIntent = new Intent(this, ViewAlbum.class);
         openAlbumIntent.putExtras(bundle);
-        this.startForResultEdit.launch(openAlbumIntent);
+        startForResultEdit.launch(openAlbumIntent);
     }
 
     private void applyChanges(ActivityResult res) {
@@ -109,10 +116,14 @@ public class Photos extends AppCompatActivity{
         if (albumInfo == null) return;
 
         String newAlbumName = albumInfo.getString("albumName");
-        this.albumManager.addAlbum(new Album(newAlbumName));
-        this.albumManager.saveAlbums();
+        albumManager.addAlbum(new Album(newAlbumName));
+        albumManager.saveAlbums();
 
+        updateList();
+    }
+
+    private void updateList() {
         // Adding the adapter again updates the list
-        this.albumList.setAdapter(new ArrayAdapter<>(this, R.layout.album, this.albumManager.getAlbums()));
+        albumList.setAdapter(new ArrayAdapter<>(this, R.layout.album, albumManager.getAlbums()));
     }
 }

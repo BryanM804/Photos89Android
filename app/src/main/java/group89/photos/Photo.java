@@ -12,17 +12,17 @@ public class Photo implements Serializable {
     private List<String> locationTags;
     // I would think this has the same restriction of only one location per photo
     // But it never says that anywhere in the assignment so no need to overcomplicate
-    private Uri imageURI;
+    private String imageURI; // Uri is not serializable
 
     public Photo(Uri imageURI) {
         this.personTags = new ArrayList<>();
         this.locationTags = new ArrayList<>();
 
-        this.imageURI = imageURI;
+        this.imageURI = imageURI.toString();
     }
 
     public Uri getImage() {
-        return this.imageURI;
+        return Uri.parse(this.imageURI);
     }
 
     public void addTag(String type, String tag) {

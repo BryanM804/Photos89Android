@@ -1,6 +1,7 @@
 package group89.photos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Album implements Serializable {
@@ -10,6 +11,7 @@ public class Album implements Serializable {
 
     public Album(String name) {
         this.name = name;
+        this.photos = new ArrayList<>();
     }
 
     public String toString() {
