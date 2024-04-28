@@ -2,6 +2,7 @@ package group89.photos.photoview;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -25,7 +26,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder> {
     @NonNull
     @Override
     public PhotoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new PhotoViewHolder(LayoutInflater.from(context).inflate(R.layout.photo, parent, false));
+        View view = LayoutInflater.from(context).inflate(R.layout.photo, parent, false);
+        //view.setOnClickListener();
+        return new PhotoViewHolder(view);
     }
 
     @Override

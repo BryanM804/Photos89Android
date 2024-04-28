@@ -109,10 +109,17 @@ public class ViewAlbum extends AppCompatActivity {
         startForResultAdd.launch(pickPhotoIntent);
     }
 
+    public void viewPhoto() {
+        Intent viewPhotoIntent = new Intent(this, ViewPhoto.class);
+        Bundle bundle = new Bundle();
+
+        //bundle.putString("imageURI", )
+    }
+
     private void updateAlbumPhotos(ActivityResult res) {
         if (res.getData() == null) return;
         Uri imageUri = res.getData().getData();
-        // Need persistant permissions for the URI or the app will crash when you try to enter tha
+        // Need persistent permissions for the URI or the app will crash when you try to enter the
         // album after the first time
         getContentResolver().takePersistableUriPermission(imageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
 

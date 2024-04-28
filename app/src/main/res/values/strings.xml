@@ -8,4 +8,7 @@
     <string name="rename_album">Rename Album</string>
     <string name="delete_album">Delete Album</string>
     <string name="add_photo">Add Photo</string>
+    <string name="search_photos">Search Photos</string>
+    <string name="add_tag">Add Tag</string>
+    <string name="move_photo">Move Photo</string>
 </resources>

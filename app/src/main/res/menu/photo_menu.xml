@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.ViewPhoto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+
+    <item
+        android:id="@+id/add_tag"
+        android:title="@string/add_tag"
+        android:onClick="addTag"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/move_photo"
+        android:title="@string/move_photo"
+        android:onClick="movePhoto"
+        app:showAsAction="collapseActionView" />
+</menu>

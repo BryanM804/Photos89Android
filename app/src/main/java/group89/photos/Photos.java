@@ -20,6 +20,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import group89.photos.activities.AddEditAlbum;
+import group89.photos.activities.SearchPhotos;
 import group89.photos.activities.ViewAlbum;
 
 public class Photos extends AppCompatActivity {
@@ -74,6 +75,9 @@ public class Photos extends AppCompatActivity {
         if (item.getItemId() == R.id.album_add) {
             addAlbum();
             return true;
+        } else if (item.getItemId() == R.id.search_button) {
+            openSearch();
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
@@ -87,6 +91,11 @@ public class Photos extends AppCompatActivity {
     private void addAlbum() {
         Intent addAlbum = new Intent(this, AddEditAlbum.class);
         startForResult.launch(addAlbum);
+    }
+
+    public void openSearch() {
+        Intent searchIntent = new Intent(this, SearchPhotos.class);
+        startActivity(searchIntent);
     }
 
     private void openAlbum(int index) {

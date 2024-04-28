@@ -33,6 +33,18 @@
             android:exported="false"
             >
         </activity>
+        <activity
+            android:name=".activities.ViewPhoto"
+            android:parentActivityName=".activities.ViewAlbum"
+            android:exported="false"
+            >
+        </activity>
+        <activity
+            android:name=".activities.SearchPhotos"
+            android:parentActivityName=".Photos"
+            android:exported="false"
+            >
+        </activity>
     </application>
 
 </manifest>
