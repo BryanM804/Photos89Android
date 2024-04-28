@@ -19,17 +19,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.io.Serializable;
-
-import group89.photos.activities.AddAlbum;
+import group89.photos.activities.AddEditAlbum;
 import group89.photos.activities.ViewAlbum;
 
 public class Photos extends AppCompatActivity {
 
     private AlbumManager albumManager;
     private ListView albumList;
-    private ActivityResultLauncher<Intent> startForResultAdd;
-    private ActivityResultLauncher<Intent> startForResultEdit; // This may not have to be here
+    private ActivityResultLauncher<Intent> startForResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +53,7 @@ public class Photos extends AppCompatActivity {
             return insets;
         });
 
-        startForResultAdd = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        applyChanges(result);
-                    }
-                });
-        startForResultEdit = registerForActivityResult(
+        startForResult = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
@@ -95,8 +85,8 @@ public class Photos extends AppCompatActivity {
     }
 
     private void addAlbum() {
-        Intent addAlbum = new Intent(this, AddAlbum.class);
-        startForResultAdd.launch(addAlbum);
+        Intent addAlbum = new Intent(this, AddEditAlbum.class);
+        startForResult.launch(addAlbum);
     }
 
     private void openAlbum(int index) {
@@ -107,7 +97,7 @@ public class Photos extends AppCompatActivity {
 
         Intent openAlbumIntent = new Intent(this, ViewAlbum.class);
         openAlbumIntent.putExtras(bundle);
-        startForResultEdit.launch(openAlbumIntent);
+        startForResult.launch(openAlbumIntent);
     }
 
     private void applyChanges(ActivityResult res) {

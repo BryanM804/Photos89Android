@@ -32,7 +32,8 @@ public class ViewAlbum extends AppCompatActivity {
 
     private String albumName = "Album Name";
     private RecyclerView photoList;
-    private ActivityResultLauncher<Intent> startForResult;
+    private ActivityResultLauncher<Intent> startForResultAdd;
+    private ActivityResultLauncher<Intent> startForResultRename;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,11 +55,18 @@ public class ViewAlbum extends AppCompatActivity {
         photoList.setLayoutManager(new LinearLayoutManager(this));
         photoList.setAdapter(new PhotoAdapter(getApplicationContext(), photos));
 
-        this.startForResult = registerForActivityResult(
+        startForResultAdd = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        this.updateAlbumPhotos(result);
+                        updateAlbumPhotos(result);
+                    }
+                });
+        startForResultRename = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        updateAlbumName(result);
                     }
                 });
     }
@@ -70,7 +78,22 @@ public class ViewAlbum extends AppCompatActivity {
         return true;
     }
     public void renameAlbum(MenuItem item) {
+        Intent renameAlbumIntent = new Intent(this, AddEditAlbum.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("albumName", albumName);
 
+        renameAlbumIntent.putExtras(bundle);
+        startForResultRename.launch(renameAlbumIntent);
+    }
+
+    public void updateAlbumName(ActivityResult res) {
+        if (res.getData() == null) return;
+
+        String newName = res.getData().getStringExtra("albumName");
+        AlbumManager.getInstance().getAlbumByName(albumName).rename(newName);
+        AlbumManager.getInstance().saveAlbums();
+
+        getSupportActionBar().setTitle(newName);
     }
 
     public void deleteAlbum(MenuItem item) {
@@ -83,7 +106,7 @@ public class ViewAlbum extends AppCompatActivity {
 
     public void addPhoto(MenuItem item) {
         Intent pickPhotoIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startForResult.launch(pickPhotoIntent);
+        startForResultAdd.launch(pickPhotoIntent);
     }
 
     private void updateAlbumPhotos(ActivityResult res) {

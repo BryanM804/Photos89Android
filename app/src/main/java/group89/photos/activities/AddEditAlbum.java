@@ -10,7 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import group89.photos.R;
 
-public class AddAlbum extends AppCompatActivity {
+public class AddEditAlbum extends AppCompatActivity {
 
     private EditText albumNameInput;
 
@@ -20,11 +20,19 @@ public class AddAlbum extends AppCompatActivity {
         setContentView(R.layout.add_album);
 
         Toolbar addAlbumToolbar = findViewById(R.id.addAlbumToolbar);
-        addAlbumToolbar.setTitle("Add Album");
         setSupportActionBar(addAlbumToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Adds the back button
 
         albumNameInput = findViewById(R.id.albumNameInput);
+
+        // If there is a bundle this is a rename window instead of new album
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            getSupportActionBar().setTitle("Rename Album");
+            albumNameInput.setText(bundle.getString("albumName"));
+        } else {
+            getSupportActionBar().setTitle("Add Album");
+        }
     }
 
     public void saveAlbum(View view) {

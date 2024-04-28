@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.AddAlbum"
+            android:name=".activities.AddEditAlbum"
             android:parentActivityName=".Photos"
             android:exported="false"
             >
