@@ -11,4 +11,10 @@
     <string name="search_photos">Search Photos</string>
     <string name="add_tag">Add Tag</string>
     <string name="move_photo">Move Photo</string>
+    <string name="remove_photo">Remove Photo</string>
+    <string name="people">People: %1$s</string>
+    <string name="locations">Location: %1$s</string>
+    <string name="tag_value">Tag Value</string>
+    <string name="person">Person</string>
+    <string name="location">Location</string>
 </resources>

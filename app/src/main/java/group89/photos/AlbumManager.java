@@ -16,6 +16,7 @@ public class AlbumManager implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final String managerFile = "albumManager.dat";
     private static AlbumManager instance;
+    private String selectedAlbum;
     private final String appDir;
     private List<Album> albums;
 
@@ -25,6 +26,14 @@ public class AlbumManager implements Serializable {
         instance = this;
 
         loadAlbums();
+    }
+
+    public void setSelectedAlbum(String albumName) {
+        this.selectedAlbum = albumName;
+    }
+
+    public String getSelectedAlbum() {
+        return this.selectedAlbum;
     }
 
     public static AlbumManager getInstance() {
@@ -52,6 +61,15 @@ public class AlbumManager implements Serializable {
             }
         }
 
+        return null;
+    }
+
+    public Photo getMatchingPhoto(Photo other) {
+        for (Photo p : getAlbumByName(selectedAlbum).getPhotos()) {
+            if (p.equals(other)) {
+                return p;
+            }
+        }
         return null;
     }
     public List<Album> getAlbums() {

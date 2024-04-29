@@ -100,6 +100,7 @@ public class Photos extends AppCompatActivity {
 
     private void openAlbum(int index) {
         Album selectedAlbum = albumManager.getAlbums().get(index);
+        albumManager.setSelectedAlbum(selectedAlbum.getName());
         Bundle bundle = new Bundle();
 
         bundle.putString("albumName", selectedAlbum.getName());

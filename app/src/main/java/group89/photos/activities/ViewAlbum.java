@@ -1,6 +1,7 @@
 package group89.photos.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,16 +46,24 @@ public class ViewAlbum extends AppCompatActivity {
 
         if (bundle != null) {
             albumName = bundle.getString("albumName");
+        } else {
+            // This is kind of a bad fix for this issue.
+            // When you would open a photo and return to the open album it will lose the bundle
+            // with the name of the album
+            albumName = AlbumManager.getInstance().getSelectedAlbum();
         }
 
         viewAlbumToolbar.setTitle(this.albumName);
         setSupportActionBar(viewAlbumToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        List<Photo> photos = AlbumManager.getInstance().getAlbumByName(albumName).getPhotos();
-        photoList = findViewById(R.id.photoList);
-        photoList.setLayoutManager(new LinearLayoutManager(this));
-        photoList.setAdapter(new PhotoAdapter(getApplicationContext(), photos));
+        Album album = AlbumManager.getInstance().getAlbumByName(albumName);
+        if (album != null) {
+            List<Photo> photos = album.getPhotos();
+            photoList = findViewById(R.id.photoList);
+            photoList.setLayoutManager(new LinearLayoutManager(this));
+            photoList.setAdapter(new PhotoAdapter(this, photos));
+        }
 
         startForResultAdd = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -109,11 +119,14 @@ public class ViewAlbum extends AppCompatActivity {
         startForResultAdd.launch(pickPhotoIntent);
     }
 
-    public void viewPhoto() {
-        Intent viewPhotoIntent = new Intent(this, ViewPhoto.class);
+    public static void viewPhoto(Context context, Photo photo) {
+        Intent viewPhotoIntent = new Intent(context, ViewPhoto.class);
         Bundle bundle = new Bundle();
 
-        //bundle.putString("imageURI", )
+        bundle.putSerializable("photo", photo);
+
+        viewPhotoIntent.putExtras(bundle);
+        context.startActivity(viewPhotoIntent);
     }
 
     private void updateAlbumPhotos(ActivityResult res) {

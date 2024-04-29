@@ -28,7 +28,7 @@
         app:layout_constraintTop_toBottomOf="@+id/photoToolbar" />
 
     <TextView
-        android:id="@+id/photoTagsText"
+        android:id="@+id/personTagsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="55dp"
@@ -42,5 +42,5 @@
         android:layout_marginStart="55dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/photoTagsText" />
+        app:layout_constraintTop_toBottomOf="@+id/personTagsText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -39,4 +39,12 @@ public class Photo implements Serializable {
     public List<String> getLocationTags() {
         return this.locationTags;
     }
+
+    public boolean equals(Object other) {
+        Photo oPhoto = (Photo) other;
+
+        return (this.personTags.equals(oPhoto.getPersonTags()) &&
+                this.locationTags.equals(oPhoto.getLocationTags()) &&
+                this.imageURI.equals(oPhoto.getImage().toString()));
+    }
 }

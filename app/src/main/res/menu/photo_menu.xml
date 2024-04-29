@@ -16,4 +16,9 @@
         android:title="@string/move_photo"
         android:onClick="movePhoto"
         app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/remove_photo"
+        android:title="@string/remove_photo"
+        android:onClick="removePhoto"
+        app:showAsAction="collapseActionView" />
 </menu>
