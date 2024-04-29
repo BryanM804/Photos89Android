@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -25,8 +27,8 @@ public class ViewPhoto extends AppCompatActivity {
     private Photo viewingPhoto;
     private ActivityResultLauncher<Intent> startForResult;
     private ActivityResultLauncher<Intent> startForMove;
-    private TextView personTagsView;
-    private TextView locationTagsView;
+    private ListView personTagsView;
+    private ListView locationTagsView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +42,10 @@ public class ViewPhoto extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             ImageView imageView = findViewById(R.id.largeImageView);
-            personTagsView = findViewById(R.id.personTagsText);
-            locationTagsView = findViewById(R.id.locationTagsText);
+            personTagsView = findViewById(R.id.personTagsList);
+            locationTagsView = findViewById(R.id.locationTagsList);
+            personTagsView.setOnItemClickListener((list, view, pos, id) -> removeTag(pos, "person"));
+            locationTagsView.setOnItemClickListener((list, view, pos, id) -> removeTag(pos, "location"));
 
             Photo photoCopy = bundle.getSerializable("photo", Photo.class);
             viewingPhoto = AlbumManager.getInstance().getMatchingPhoto(photoCopy);
@@ -103,11 +107,15 @@ public class ViewPhoto extends AppCompatActivity {
         finish();
     }
 
-    public void updateTags() {
-        String peopleString = viewingPhoto.getPersonTags().toString();
-        String locationString = viewingPhoto.getLocationTags().toString();
+    public void removeTag(int position, String type) {
+        // TODO: make confirmation popup
+        viewingPhoto.removeTag(type, position);
+        AlbumManager.getInstance().saveAlbums();
+        updateTags();
+    }
 
-        personTagsView.setText(getString(R.string.people, peopleString));
-        locationTagsView.setText(getString(R.string.locations, locationString));
+    public void updateTags() {
+        personTagsView.setAdapter(new ArrayAdapter<>(this, R.layout.tag, viewingPhoto.getPersonTags()));
+        locationTagsView.setAdapter(new ArrayAdapter<>(this, R.layout.tag, viewingPhoto.getLocationTags()));
     }
 }

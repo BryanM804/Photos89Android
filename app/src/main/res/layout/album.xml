@@ -9,5 +9,5 @@
         android:padding="10dp"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:textSize="14sp"
+        android:textSize="20sp"
     />

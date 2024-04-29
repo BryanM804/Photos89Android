@@ -43,10 +43,14 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
         holder.imageView.setImageURI(photos.get(position).getImage());
-        holder.personTags.setText(context.getString(R.string.people,
-                photos.get(position).getPersonTags().toString()));
-        holder.locationTags.setText(context.getString(R.string.locations,
-                photos.get(position).getLocationTags().toString()));
+
+        String personString = photos.get(position).getPersonTags().isEmpty() ? "None" : photos.get(position).getPersonTags().toString();
+        String locationString = photos.get(position).getLocationTags().isEmpty() ? "None" : photos.get(position).getLocationTags().toString();
+
+        holder.personTags.setText(context.getString(R.string.peopleParam,
+                personString));
+        holder.locationTags.setText(context.getString(R.string.locationsParam,
+                locationString));
     }
 
     @Override

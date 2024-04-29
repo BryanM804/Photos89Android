@@ -33,6 +33,14 @@ public class Photo implements Serializable {
         }
     }
 
+    public void removeTag(String type, int index) {
+        if (type.equals("person")) {
+            personTags.remove(index);
+        } else {
+            locationTags.remove(index);
+        }
+    }
+
     public List<String> getPersonTags() {
         return this.personTags;
     }
