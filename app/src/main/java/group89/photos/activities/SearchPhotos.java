@@ -7,9 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Filter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,17 +64,16 @@ public class SearchPhotos extends AppCompatActivity
             @Override
             public boolean onQueryTextChange(String newText)
             {
-                if (newText.contains("location=") || newText.contains("person="))
+                if (!newText.isEmpty())
                 {
-                    String[] parts = newText.split("=");
-                    if (parts.length > 1)
-                    {
-                        String tagType = parts[0].trim();
-                        String prefix = parts[1].trim();
-                        Set<String> relevantTags = tagType.equalsIgnoreCase("location") ? suggestionAdapter.getAllLocationTags() : suggestionAdapter.getAllPersonTags();
-                        suggestionAdapter.updateCursor(tagType, prefix, relevantTags);
-                    }
+                    Set<String> suggestions = new HashSet<>();
+
+                    suggestions.addAll(suggestionAdapter.getAllPersonTags());
+                    suggestions.addAll(suggestionAdapter.getAllLocationTags());
+
+                    suggestionAdapter.updateCursor(newText, suggestions);
                 }
+
                 return true;
             }
         });
@@ -95,7 +91,7 @@ public class SearchPhotos extends AppCompatActivity
         query = query.toLowerCase(); // simplify
 
         Pattern pattern = Pattern.compile("(\\w+)=(\\w[\\w\\s]*)");
-        String[] components = query.split("\\s+(AND|OR)\\s+");
+        String[] components = query.split("\\s+(and|or)\\s+");
 
         if (components.length != 1 && components.length != 2)
         {
@@ -202,7 +198,7 @@ public class SearchPhotos extends AppCompatActivity
             }
         }
 
-        public void updateCursor(String tagType, String prefix, Set<String> tags)
+        public void updateCursor(String prefix, Set<String> tags)
         {
             MatrixCursor cursor = new MatrixCursor(new String[] {"_id", "tag"});
             int id = 0;
@@ -210,7 +206,7 @@ public class SearchPhotos extends AppCompatActivity
             {
                 if (tag.toLowerCase().startsWith(prefix.toLowerCase()))
                 {
-                    cursor.addRow(new Object[] {id++, tagType + "=" + tag});
+                    cursor.addRow(new Object[] {id++, tag});
                 }
             }
             changeCursor(cursor);
