@@ -17,7 +17,7 @@ public class AlbumManager implements Serializable {
     private static final String managerFile = "albumManager.dat";
     private static AlbumManager instance;
     private String selectedAlbum;
-    private final String appDir;
+    private String appDir;
     private List<Album> albums;
 
     public AlbumManager(String appDir) {
@@ -25,6 +25,11 @@ public class AlbumManager implements Serializable {
         this.appDir = appDir;
         instance = this;
 
+        loadAlbums();
+    }
+
+    public AlbumManager() {
+        this.albums = new ArrayList<>();
         loadAlbums();
     }
 
@@ -52,6 +57,12 @@ public class AlbumManager implements Serializable {
         }
 
         return false;
+    }
+
+    // Always moves from selected album
+    public void movePhoto(Photo movingPhoto, Album destinationAlbum) {
+        getAlbumByName(selectedAlbum).removePhoto(movingPhoto);
+        destinationAlbum.addPhoto(movingPhoto);
     }
 
     public Album getAlbumByName(String albumName) {
@@ -110,7 +121,8 @@ public class AlbumManager implements Serializable {
             inStream.close();
 
             this.albums = loadedManager.albums;
-
+            this.selectedAlbum = loadedManager.selectedAlbum;
+            this.appDir = loadedManager.appDir;
         } catch (Exception e) {
             Log.d("Error", "Could not load albums!\n" + e);
             Log.d("INFO", "Path: " + managerPath);

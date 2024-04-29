@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -33,8 +34,9 @@ import group89.photos.photoview.PhotoAdapter;
 public class ViewAlbum extends AppCompatActivity {
 
     private String albumName = "Album Name";
+    private AlbumManager albumManager;
     private RecyclerView photoList;
-    private ActivityResultLauncher<Intent> startForResultAdd;
+    private ActivityResultLauncher<Intent> startForResultAddRemove;
     private ActivityResultLauncher<Intent> startForResultRename;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class ViewAlbum extends AppCompatActivity {
 
         Toolbar viewAlbumToolbar = findViewById(R.id.viewAlbumToolbar);
         Bundle bundle = getIntent().getExtras();
+        albumManager = AlbumManager.getInstance();
 
         if (bundle != null) {
             albumName = bundle.getString("albumName");
@@ -50,14 +53,14 @@ public class ViewAlbum extends AppCompatActivity {
             // This is kind of a bad fix for this issue.
             // When you would open a photo and return to the open album it will lose the bundle
             // with the name of the album
-            albumName = AlbumManager.getInstance().getSelectedAlbum();
+            albumName = albumManager.getSelectedAlbum();
         }
 
         viewAlbumToolbar.setTitle(this.albumName);
         setSupportActionBar(viewAlbumToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Album album = AlbumManager.getInstance().getAlbumByName(albumName);
+        Album album = albumManager.getAlbumByName(albumName);
         if (album != null) {
             List<Photo> photos = album.getPhotos();
             photoList = findViewById(R.id.photoList);
@@ -65,7 +68,7 @@ public class ViewAlbum extends AppCompatActivity {
             photoList.setAdapter(new PhotoAdapter(this, photos));
         }
 
-        startForResultAdd = registerForActivityResult(
+        startForResultAddRemove = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
@@ -100,47 +103,50 @@ public class ViewAlbum extends AppCompatActivity {
         if (res.getData() == null) return;
 
         String newName = res.getData().getStringExtra("albumName");
-        AlbumManager.getInstance().getAlbumByName(albumName).rename(newName);
-        AlbumManager.getInstance().saveAlbums();
+        albumManager.getAlbumByName(albumName).rename(newName);
+        albumManager.saveAlbums();
 
         getSupportActionBar().setTitle(newName);
     }
 
     public void deleteAlbum(MenuItem item) {
         // TODO: Add confirmation popup
-        AlbumManager.getInstance().deleteAlbum(albumName);
-        AlbumManager.getInstance().saveAlbums();
+        albumManager.deleteAlbum(albumName);
+        albumManager.saveAlbums();
 
         finish();
     }
 
     public void addPhoto(MenuItem item) {
         Intent pickPhotoIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startForResultAdd.launch(pickPhotoIntent);
+        startForResultAddRemove.launch(pickPhotoIntent);
     }
 
-    public static void viewPhoto(Context context, Photo photo) {
-        Intent viewPhotoIntent = new Intent(context, ViewPhoto.class);
+    public void viewPhoto(Photo photo) {
+        Intent viewPhotoIntent = new Intent(this, ViewPhoto.class);
         Bundle bundle = new Bundle();
 
         bundle.putSerializable("photo", photo);
 
+        albumManager.saveAlbums();
         viewPhotoIntent.putExtras(bundle);
-        context.startActivity(viewPhotoIntent);
+        startForResultAddRemove.launch(viewPhotoIntent);
     }
 
     private void updateAlbumPhotos(ActivityResult res) {
-        if (res.getData() == null) return;
-        Uri imageUri = res.getData().getData();
-        // Need persistent permissions for the URI or the app will crash when you try to enter the
-        // album after the first time
-        getContentResolver().takePersistableUriPermission(imageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        if (res.getData() != null) {
+            Uri imageUri = res.getData().getData();
+            // Need persistent permissions for the URI or the app will crash when you try to enter the
+            // album after the first time
+            getContentResolver().takePersistableUriPermission(imageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-        Photo newPhoto = new Photo(imageUri);
-        AlbumManager.getInstance().getAlbumByName(albumName).addPhoto(newPhoto);
-        AlbumManager.getInstance().saveAlbums();
+            Photo newPhoto = new Photo(imageUri);
+            albumManager.getAlbumByName(albumName).addPhoto(newPhoto);
+            albumManager.saveAlbums();
+        }
 
-        List<Photo> photos = AlbumManager.getInstance().getAlbumByName(albumName).getPhotos();
-        photoList.setAdapter(new PhotoAdapter(getApplicationContext(), photos));
+        List<Photo> photos = albumManager.getAlbumByName(albumName).getPhotos();
+        photoList.setAdapter(new PhotoAdapter(this, photos));
+        photoList.getAdapter().notifyDataSetChanged();
     }
 }

@@ -82,7 +82,8 @@ class PhotoClickListener implements View.OnClickListener {
         if (recyclerView != null && photos != null) {
             int pos = recyclerView.getChildAdapterPosition(v);
             Photo selectedPhoto = photos.get(pos);
-            ViewAlbum.viewPhoto(context, selectedPhoto);
+            ViewAlbum parentActivity = (ViewAlbum) context;
+            parentActivity.viewPhoto(selectedPhoto);
         }
     }
 }

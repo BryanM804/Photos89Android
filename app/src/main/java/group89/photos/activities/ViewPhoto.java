@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import group89.photos.Album;
 import group89.photos.AlbumManager;
 import group89.photos.Photo;
 import group89.photos.R;
@@ -23,6 +24,7 @@ public class ViewPhoto extends AppCompatActivity {
 
     private Photo viewingPhoto;
     private ActivityResultLauncher<Intent> startForResult;
+    private ActivityResultLauncher<Intent> startForMove;
     private TextView personTagsView;
     private TextView locationTagsView;
 
@@ -55,6 +57,15 @@ public class ViewPhoto extends AppCompatActivity {
                         updateTags();
                     }
                 });
+        startForMove = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        setResult(Activity.RESULT_OK);
+                        finish();
+                    }
+                });
+
     }
 
     @Override
@@ -74,11 +85,22 @@ public class ViewPhoto extends AppCompatActivity {
     }
 
     public void movePhoto(MenuItem menuItem) {
+        Intent movePhotoIntent = new Intent(this, MovePhoto.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("photo", viewingPhoto);
 
+        movePhotoIntent.putExtras(bundle);
+        startForMove.launch(movePhotoIntent);
     }
 
     public void removePhoto(MenuItem menuItem) {
-
+        Album album = AlbumManager.getInstance().getAlbumByName(AlbumManager.getInstance().getSelectedAlbum());
+        if (album != null) {
+            album.removePhoto(viewingPhoto);
+        }
+        AlbumManager.getInstance().saveAlbums();
+        setResult(Activity.RESULT_OK);
+        finish();
     }
 
     public void updateTags() {

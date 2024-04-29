@@ -21,6 +21,9 @@ public class Album implements Serializable {
     public void addPhoto(Photo newPhoto) {
         photos.add(newPhoto);
     }
+    public void removePhoto(Photo removingPhoto) {
+        photos.remove(removingPhoto);
+    }
     public void rename(String newName) {
         this.name = newName;
     }

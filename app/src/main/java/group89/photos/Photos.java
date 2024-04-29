@@ -40,7 +40,6 @@ public class Photos extends AppCompatActivity {
 
         // App specific storage path            VVVV
         albumManager = new AlbumManager(this.getFilesDir().toString());
-        albumManager.loadAlbums();
 
         // Populate ListView
         albumList = findViewById(R.id.albumList);
