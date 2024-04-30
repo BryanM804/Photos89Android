@@ -6,4 +6,7 @@
     </style>
 
     <style name="Theme.Photos" parent="Base.Theme.Photos" />
+    <style name="ToolbarColoredBackArrow" >
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
 </resources>
