@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:context=".activities.Slideshow">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/slideshowToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        />
+
+    <ImageView
+        android:layout_width="365dp"
+        android:layout_height="365dp"
+        android:layout_gravity="center"
+        android:id="@+id/slideshowImage"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        >
+
+        <Button
+            android:id="@+id/prevButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/back"
+            android:layout_margin="10dp"
+            android:onClick="previousPhoto"
+            />
+
+        <Button
+            android:id="@+id/nextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/next"
+            android:layout_margin="10dp"
+            android:onClick="nextPhoto"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

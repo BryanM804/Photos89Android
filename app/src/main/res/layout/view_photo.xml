@@ -9,7 +9,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/photoToolbar"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
@@ -21,11 +21,21 @@
         android:layout_width="280dp"
         android:layout_height="280dp"
         android:layout_marginStart="55dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="55dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/photoToolbar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tagTip"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:text="@string/tag_tip"
+        app:layout_constraintTop_toBottomOf="@id/largeImageView"
+        />
 
     <TextView
         android:id="@+id/peopleText"
@@ -33,12 +43,12 @@
         android:layout_height="wrap_content"
         android:paddingStart="10dp"
         android:text="@string/people"
-        app:layout_constraintTop_toBottomOf="@id/largeImageView" />
+        app:layout_constraintTop_toBottomOf="@id/tagTip" />
 
     <ListView
         android:id="@+id/personTagsList"
         android:layout_width="wrap_content"
-        android:layout_height="110dp"
+        android:layout_height="100dp"
         app:layout_constraintTop_toBottomOf="@+id/peopleText"
         >
 

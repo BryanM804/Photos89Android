@@ -40,6 +40,12 @@
             >
         </activity>
         <activity
+            android:name=".activities.Slideshow"
+            android:parentActivityName=".activities.ViewAlbum"
+            android:exported="false"
+            >
+        </activity>
+        <activity
             android:name=".activities.AddTag"
             android:parentActivityName=".activities.ViewPhoto"
             android:exported="false"

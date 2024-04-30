@@ -16,6 +16,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/imageView"
+        android:id="@+id/photoName"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/photoName"
+        android:layout_toEndOf="@id/imageView"
         android:id="@+id/personTags"
         />
     <TextView

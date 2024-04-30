@@ -8,21 +8,27 @@ import java.util.List;
 
 public class Photo implements Serializable {
     private static final long serialVersionUID = 1L;
+    private String name;
     private List<String> personTags;
     private List<String> locationTags;
     // I would think this has the same restriction of only one location per photo
     // But it never says that anywhere in the assignment so no need to overcomplicate
     private String imageURI; // Uri is not serializable
 
-    public Photo(Uri imageURI) {
+    public Photo(Uri imageURI, String name) {
         this.personTags = new ArrayList<>();
         this.locationTags = new ArrayList<>();
 
         this.imageURI = imageURI.toString();
+        this.name = name;
     }
 
     public Uri getImage() {
         return Uri.parse(this.imageURI);
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public void addTag(String type, String tag) {

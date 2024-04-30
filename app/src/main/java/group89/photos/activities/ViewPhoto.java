@@ -42,6 +42,7 @@ public class ViewPhoto extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             ImageView imageView = findViewById(R.id.largeImageView);
+
             personTagsView = findViewById(R.id.personTagsList);
             locationTagsView = findViewById(R.id.locationTagsList);
             personTagsView.setOnItemClickListener((list, view, pos, id) -> removeTag(pos, "person"));
@@ -50,6 +51,7 @@ public class ViewPhoto extends AppCompatActivity {
             Photo photoCopy = bundle.getSerializable("photo", Photo.class);
             viewingPhoto = AlbumManager.getInstance().getMatchingPhoto(photoCopy);
 
+            getSupportActionBar().setTitle(viewingPhoto.getName());
             imageView.setImageURI(viewingPhoto.getImage());
             updateTags();
         }
