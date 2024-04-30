@@ -36,6 +36,7 @@ public class SearchPhotos extends AppCompatActivity
 {
     private RecyclerView resultsView;
     private List<Photo> results;
+    private Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -58,7 +59,7 @@ public class SearchPhotos extends AppCompatActivity
         resultsView = findViewById(R.id.resultsList);
         resultsView.setLayoutManager(new LinearLayoutManager(this));
         results = new ArrayList<>();
-        resultsView.setAdapter(new PhotoAdapter(this, results));
+        context = this;
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
         {
@@ -71,8 +72,8 @@ public class SearchPhotos extends AppCompatActivity
 
                 // May or may not work, not sure yet
                 results = matches;
-                resultsView.getAdapter().notifyDataSetChanged();
-                Log.d("INFO", "Results updated\n" + matches);
+                resultsView.setAdapter(new PhotoAdapter(context, results));
+                Log.d("INFO", "Results updated, got " + matches.size() + " results\n" + matches);
 
                 return true;
             }
@@ -173,13 +174,23 @@ public class SearchPhotos extends AppCompatActivity
         {
             for (Photo photo : album.getPhotos())
             {
-                if (tagName.equals("person") && photo.getPersonTags().contains(tagValue))
+
+                if (tagName.equals("person"))
                 {
-                    matchingPhotos.add(photo);
-                } else if (tagName.equals("location") && photo.getLocationTags().contains(tagValue))
+                    for (String t : photo.getLowercasePersonTags()) {
+                        if (t.startsWith(tagValue) && !matchingPhotos.contains(photo)) {
+                            matchingPhotos.add(photo);
+                        }
+                    }
+                } else if (tagName.equals("location"))
                 {
-                    matchingPhotos.add(photo);
+                    for (String t : photo.getLowercaseLocationTags()) {
+                        if (t.startsWith(tagValue) && !matchingPhotos.contains(photo)) {
+                            matchingPhotos.add(photo);
+                        }
+                    }
                 }
+                Log.d("INFO", "Searched photo: " + photo.toString() +" for tag: " + tagValue);
             }
         }
         return matchingPhotos;

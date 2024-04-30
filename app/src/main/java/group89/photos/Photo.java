@@ -48,6 +48,21 @@ public class Photo implements Serializable {
         return this.locationTags;
     }
 
+    public List<String> getLowercasePersonTags() {
+        List<String> lcTags = new ArrayList<>();
+        for (String s : personTags) {
+            lcTags.add(s.toLowerCase());
+        }
+        return lcTags;
+    }
+    public List<String> getLowercaseLocationTags() {
+        List<String> lcTags = new ArrayList<>();
+        for (String s : locationTags) {
+            lcTags.add(s.toLowerCase());
+        }
+        return lcTags;
+    }
+
     public boolean equals(Object other) {
         Photo oPhoto = (Photo) other;
 
