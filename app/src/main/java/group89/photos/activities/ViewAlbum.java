@@ -2,7 +2,6 @@ package group89.photos.activities;
 
 import android.app.Activity;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,14 +11,10 @@ import android.provider.OpenableColumns;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,8 +26,8 @@ import java.util.List;
 import group89.photos.Album;
 import group89.photos.AlbumManager;
 import group89.photos.Photo;
-import group89.photos.Photos;
 import group89.photos.R;
+import group89.photos.fragments.ConfirmationFragment;
 import group89.photos.photoview.PhotoAdapter;
 
 public class ViewAlbum extends AppCompatActivity {
@@ -114,11 +109,19 @@ public class ViewAlbum extends AppCompatActivity {
     }
 
     public void deleteAlbum(MenuItem item) {
-        // TODO: Add confirmation popup
-        albumManager.deleteAlbum(albumName);
-        albumManager.saveAlbums();
+        getSupportFragmentManager().setFragmentResultListener("OK", this, (requestKey, result) -> {
+            if (result.getString("result").equals("OK")) {
+                albumManager.deleteAlbum(albumName);
+                albumManager.saveAlbums();
 
-        finish();
+                finish();
+            }
+        });
+        ConfirmationFragment confirmationFrag = new ConfirmationFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("message", "Are you sure you want to delete this album?");
+        confirmationFrag.setArguments(bundle);
+        confirmationFrag.show(getSupportFragmentManager(), "confirmation");
     }
 
     public void addPhoto(MenuItem item) {
@@ -148,6 +151,7 @@ public class ViewAlbum extends AppCompatActivity {
         bundle.putSerializable("photo", photo);
 
         albumManager.saveAlbums();
+        albumManager.setViewingPhoto(photo);
         viewPhotoIntent.putExtras(bundle);
         startForResultAddRemove.launch(viewPhotoIntent);
     }

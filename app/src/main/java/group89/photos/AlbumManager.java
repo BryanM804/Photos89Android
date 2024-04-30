@@ -17,6 +17,7 @@ public class AlbumManager implements Serializable {
     private static final String managerFile = "albumManager.dat";
     private static AlbumManager instance;
     private String selectedAlbum;
+    private Photo viewingPhoto;
     private String appDir;
     private List<Album> albums;
 
@@ -28,17 +29,18 @@ public class AlbumManager implements Serializable {
         loadAlbums();
     }
 
-    public AlbumManager() {
-        this.albums = new ArrayList<>();
-        loadAlbums();
-    }
-
     public void setSelectedAlbum(String albumName) {
         this.selectedAlbum = albumName;
+    }
+    public void setViewingPhoto(Photo photo) {
+        this.viewingPhoto = photo;
     }
 
     public String getSelectedAlbum() {
         return this.selectedAlbum;
+    }
+    public Photo getViewingPhoto() {
+        return this.viewingPhoto;
     }
 
     public static AlbumManager getInstance() {

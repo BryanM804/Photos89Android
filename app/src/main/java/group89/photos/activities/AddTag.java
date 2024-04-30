@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -45,6 +46,11 @@ public class AddTag extends AppCompatActivity {
 
         if (!tag.isEmpty()) {
             if (personRadioButton.isChecked()) {
+                if (taggingPhoto.getLowercasePersonTags().contains(tag.toLowerCase())) {
+                    Toast.makeText(this, "This photo already has this tag!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 taggingPhoto.addTag("person", tag);
                 AlbumManager.getInstance().saveAlbums();
                 Log.d("INFO", "Added person tag");
@@ -52,17 +58,23 @@ public class AddTag extends AppCompatActivity {
                 setResult(RESULT_OK);
                 finish();
             } else if (locationRadioButton.isChecked()) {
+                if (taggingPhoto.getLowercaseLocationTags().contains(tag.toLowerCase())) {
+                    Toast.makeText(this, "This photo already has this tag!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 taggingPhoto.addTag("location", tag);
                 AlbumManager.getInstance().saveAlbums();
                 Log.d("INFO", "Added location tag");
 
                 setResult(RESULT_OK);
                 finish();
+            } else {
+                Toast.makeText(this, "Please select a tag type!", Toast.LENGTH_LONG).show();
             }
+        } else {
+            Toast.makeText(this, "Please enter a tag!", Toast.LENGTH_LONG).show();
         }
-
-        // TODO: make error message
-        finish();
     }
 
     public void cancel(View view) {

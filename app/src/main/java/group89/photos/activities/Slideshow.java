@@ -8,8 +8,6 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import java.util.List;
-
 import group89.photos.R;
 
 public class Slideshow extends AppCompatActivity {

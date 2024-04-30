@@ -1,24 +1,18 @@
 package group89.photos.photoview;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import group89.photos.Album;
-import group89.photos.AlbumManager;
 import group89.photos.Photo;
 import group89.photos.R;
 import group89.photos.activities.ViewAlbum;
-import group89.photos.activities.ViewPhoto;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder> {
 

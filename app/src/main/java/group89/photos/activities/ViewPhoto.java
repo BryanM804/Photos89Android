@@ -2,7 +2,6 @@ package group89.photos.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,15 +9,11 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentResultListener;
 
 import group89.photos.Album;
 import group89.photos.AlbumManager;
@@ -43,22 +38,24 @@ public class ViewPhoto extends AppCompatActivity {
         setSupportActionBar(photoToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        ImageView imageView = findViewById(R.id.largeImageView);
+        personTagsView = findViewById(R.id.personTagsList);
+        locationTagsView = findViewById(R.id.locationTagsList);
+        personTagsView.setOnItemClickListener((list, view, pos, id) -> removeTag(pos, "person"));
+        locationTagsView.setOnItemClickListener((list, view, pos, id) -> removeTag(pos, "location"));
+
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            ImageView imageView = findViewById(R.id.largeImageView);
-
-            personTagsView = findViewById(R.id.personTagsList);
-            locationTagsView = findViewById(R.id.locationTagsList);
-            personTagsView.setOnItemClickListener((list, view, pos, id) -> removeTag(pos, "person"));
-            locationTagsView.setOnItemClickListener((list, view, pos, id) -> removeTag(pos, "location"));
-
             Photo photoCopy = bundle.getSerializable("photo", Photo.class);
             viewingPhoto = AlbumManager.getInstance().getMatchingPhoto(photoCopy);
-
-            getSupportActionBar().setTitle(viewingPhoto.getName());
-            imageView.setImageURI(viewingPhoto.getImage());
-            updateTags();
+        } else {
+            Photo photoCopy = AlbumManager.getInstance().getViewingPhoto();
+            viewingPhoto = AlbumManager.getInstance().getMatchingPhoto(photoCopy);
         }
+
+        getSupportActionBar().setTitle(viewingPhoto.getName());
+        imageView.setImageURI(viewingPhoto.getImage());
+        updateTags();
 
         startForResult = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),

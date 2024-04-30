@@ -28,7 +28,6 @@ import java.util.regex.Pattern;
 import group89.photos.Album;
 import group89.photos.AlbumManager;
 import group89.photos.Photo;
-import group89.photos.Photos;
 import group89.photos.R;
 import group89.photos.photoview.PhotoAdapter;
 

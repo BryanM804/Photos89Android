@@ -115,6 +115,7 @@ public class Photos extends AppCompatActivity {
         if (albumInfo == null) return;
 
         String newAlbumName = albumInfo.getString("albumName");
+
         albumManager.addAlbum(new Album(newAlbumName));
         albumManager.saveAlbums();
 

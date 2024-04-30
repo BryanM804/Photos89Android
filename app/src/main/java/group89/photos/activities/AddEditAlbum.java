@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import group89.photos.Album;
+import group89.photos.AlbumManager;
 import group89.photos.R;
 
 public class AddEditAlbum extends AppCompatActivity {
@@ -37,9 +40,22 @@ public class AddEditAlbum extends AppCompatActivity {
 
     public void saveAlbum(View view) {
         String albumName = albumNameInput.getText().toString();
+        boolean exists = false;
 
         if (albumName.isEmpty()) {
-            // TODO: Display Error
+            Toast.makeText(this, "Please enter an album name!", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        for (Album a : AlbumManager.getInstance().getAlbums()) {
+            if (a.getName().equals(albumName)) {
+                exists = true;
+                break;
+            }
+        }
+
+        if (exists) {
+            Toast.makeText(this, "Album already exists!", Toast.LENGTH_LONG).show();
             return;
         }
 
