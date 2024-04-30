@@ -14,13 +14,17 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentResultListener;
 
 import group89.photos.Album;
 import group89.photos.AlbumManager;
 import group89.photos.Photo;
 import group89.photos.R;
+import group89.photos.fragments.ConfirmationFragment;
 
 public class ViewPhoto extends AppCompatActivity {
 
@@ -110,10 +114,18 @@ public class ViewPhoto extends AppCompatActivity {
     }
 
     public void removeTag(int position, String type) {
-        // TODO: make confirmation popup
-        viewingPhoto.removeTag(type, position);
-        AlbumManager.getInstance().saveAlbums();
-        updateTags();
+        getSupportFragmentManager().setFragmentResultListener("OK", this, (requestKey, result) -> {
+            if (result.getString("result").equals("OK")) {
+                viewingPhoto.removeTag(type, position);
+                AlbumManager.getInstance().saveAlbums();
+                updateTags();
+            }
+        });
+        ConfirmationFragment confirmationFrag = new ConfirmationFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("message", "Are you sure you want to delete this tag?");
+        confirmationFrag.setArguments(bundle);
+        confirmationFrag.show(getSupportFragmentManager(), "confirmation");
     }
 
     public void updateTags() {
