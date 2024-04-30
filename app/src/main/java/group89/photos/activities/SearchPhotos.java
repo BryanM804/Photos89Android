@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cursoradapter.widget.CursorAdapter;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,11 +31,14 @@ import java.util.regex.Pattern;
 import group89.photos.Album;
 import group89.photos.AlbumManager;
 import group89.photos.Photo;
+import group89.photos.Photos;
 import group89.photos.R;
+import group89.photos.photoview.PhotoAdapter;
 
 public class SearchPhotos extends AppCompatActivity
 {
-
+    private RecyclerView resultsView;
+    private List<Photo> results;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -52,6 +58,11 @@ public class SearchPhotos extends AppCompatActivity
         TagSuggestionAdapter suggestionAdapter = new TagSuggestionAdapter(this);
         searchView.setSuggestionsAdapter(suggestionAdapter);
 
+        resultsView = findViewById(R.id.resultsList);
+        resultsView.setLayoutManager(new LinearLayoutManager(this));
+        results = new ArrayList<>();
+        resultsView.setAdapter(new PhotoAdapter(this, results));
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
         {
             @Override
@@ -60,6 +71,11 @@ public class SearchPhotos extends AppCompatActivity
                 List<Photo> matches = searchPhotos(query);
 
                 // here is where the matches are returned. the photos can then be displayed
+
+                // May or may not work, not sure yet
+                results = matches;
+                resultsView.getAdapter().notifyDataSetChanged();
+                Log.d("INFO", "Results updated\n" + matches);
 
                 return true;
             }
